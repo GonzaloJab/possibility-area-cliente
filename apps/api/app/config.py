@@ -1,6 +1,6 @@
 """Settings loaded from env (Pydantic v2 + pydantic-settings)."""
 from typing import List
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,17 +17,19 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRES_MINUTES: int = 60 * 24 * 7  # 7 days
 
-    CORS_ORIGINS: List[str] = ["http://localhost:5173"]
+    # Plain str so env / .env comma-separated values are not JSON-decoded by pydantic-settings.
+    cors_origins: str = Field(
+        default="http://localhost:5173",
+        validation_alias="CORS_ORIGINS",
+        description="Comma-separated browser origins for CORS.",
+    )
 
     PORT: int = 4000
     ENV: str = "development"
 
-    @field_validator("CORS_ORIGINS", mode="before")
-    @classmethod
-    def _split_origins(cls, v):
-        if isinstance(v, str):
-            return [o.strip() for o in v.split(",") if o.strip()]
-        return v
+    @property
+    def cors_origin_list(self) -> List[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     @property
     def async_database_url(self) -> str:

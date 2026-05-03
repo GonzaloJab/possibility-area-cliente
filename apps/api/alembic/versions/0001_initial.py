@@ -30,8 +30,6 @@ def upgrade() -> None:
 
     supply_type = sa.Enum("RESIDENCIAL", "RESTAURACION", "EMPRESA", name="supply_type")
     invoice_status = sa.Enum("PAGADA", "PENDIENTE", "VENCIDA", name="invoice_status")
-    supply_type.create(op.get_bind(), checkfirst=True)
-    invoice_status.create(op.get_bind(), checkfirst=True)
 
     op.create_table(
         "supplies",
