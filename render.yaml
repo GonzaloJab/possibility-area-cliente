@@ -1,0 +1,44 @@
+# Render Infrastructure as Code
+# https://render.com/docs/blueprint-spec
+# When you connect this repo, Render creates both services from the same Dockerfiles
+# you use locally. To migrate to Hetzner later, the same images can be pulled there
+# without rebuilds.
+services:
+  - type: web
+    name: possibility-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false  # Neon: paste the standard postgresql:// connection string
+      - key: DATABASE_URL_ASYNC
+        sync: false  # Neon: same as DATABASE_URL but with postgresql+asyncpg://
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_MINUTES
+        value: 10080
+      - key: CORS_ORIGINS
+        sync: false  # https://possibility-web.onrender.com (or your custom domain)
+
+  - type: web
+    name: possibility-web
+    runtime: docker
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL
+        sync: false  # https://possibility-api.onrender.com

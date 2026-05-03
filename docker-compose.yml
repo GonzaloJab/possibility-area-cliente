@@ -1,0 +1,57 @@
+# Local-dev stack: Postgres + FastAPI + React (nginx)
+# Same Dockerfiles used in production (Render/Hetzner) — no drift.
+# Run: docker compose up --build
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: possibility-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: possibility
+      POSTGRES_PASSWORD: possibility
+      POSTGRES_DB: possibility
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U possibility -d possibility"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: possibility-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://possibility:possibility@postgres:5432/possibility
+      DATABASE_URL_ASYNC: postgresql+asyncpg://possibility:possibility@postgres:5432/possibility
+      JWT_SECRET: dev-only-secret-change-me-to-something-long
+      JWT_EXPIRES_MINUTES: 10080
+      CORS_ORIGINS: http://localhost:5173
+      PORT: 4000
+      ENV: development
+    ports:
+      - "4000:4000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:4000
+    container_name: possibility-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres_data:

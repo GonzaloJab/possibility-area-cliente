@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Possibility® — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#FAFBF9;color:#1A1E18;padding:32px;min-height:100vh}
+.wrap{max-width:1280px;margin:0 auto}
+.pc{background:#FFF;border:1px solid #DCE4D8;border-radius:16px;transition:all .25s}
+.pc:hover{border-color:#C5D1C0}
+.pt{padding:9px 20px;border-radius:100px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;background:transparent;color:#fff;transition:all .2s}
+.pt.a{background:rgba(255,255,255,.95);color:#1A1E18}
+.ps{padding:11px 16px;border:1px solid #DCE4D8;border-radius:12px;font-size:14px;background:#FFF;cursor:pointer;font-family:inherit;min-width:340px;outline:none}
+.pb{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border:none;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;background:#1A6B1A;color:#fff;font-family:inherit;transition:all .2s}
+.pb:hover{background:#145214}
+.pg{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-family:inherit;backdrop-filter:blur(12px)}
+.bd{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;color:#1A6B1A;background:rgba(26,107,26,.1)}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;cursor:pointer;position:relative}
+.bw .tt{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;padding:6px 10px;border-radius:8px;background:#1A1E18;color:#fff;font-size:11px;font-weight:500;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;z-index:5}
+.bw:hover .tt{opacity:1}
+.bw:hover .bs{background:#C0DD97!important}
+.bw.y:hover .bs{background:#1A6B1A!important}
+.live{display:inline-block;width:7px;height:7px;border-radius:50%;background:#1A6B1A;margin-right:6px;animation:pls 1.6s infinite}
+@keyframes pls{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.ic-btn{width:38px;height:38px;border-radius:11px;border:1px solid #DCE4D8;background:#FFF;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#5E6B5A;transition:all .2s;font-family:inherit}
+.ic-btn:hover{border-color:#1A6B1A;color:#1A6B1A}
+.boost-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;cursor:pointer;transition:all .2s}
+.boost-row:hover{background:rgba(255,255,255,.14)}
+.boost-row.on{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4)}
+.toggle{width:38px;height:22px;border-radius:11px;background:rgba(255,255,255,.25);position:relative;flex-shrink:0;transition:background .2s}
+.toggle.on{background:#fff}
+.toggle::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.toggle.on::after{background:#1A6B1A;left:19px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#FFF;border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;padding:28px 32px}
+.modal h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;letter-spacing:-.01em;margin:0 0 4px}
+.modal-row{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #DCE4D8;border-radius:12px;cursor:pointer;transition:all .2s;margin-bottom:8px}
+.modal-row:hover{border-color:#1A6B1A;background:#F8FBF8}
+.modal-row svg{flex-shrink:0;color:#1A6B1A}
+.act{display:flex;flex-direction:column;justify-content:flex-start;padding:18px;border:1px solid #DCE4D8;background:#FFF;border-radius:16px;cursor:pointer;transition:all .2s;text-align:left;font-family:inherit;min-height:170px}
+.act:hover{border-color:#1A6B1A;background:#F8FBF8;transform:translateY(-2px)}
+.act .ic{width:38px;height:38px;border-radius:11px;background:rgba(26,107,26,.1);display:flex;align-items:center;justify-content:center;color:#1A6B1A;margin-bottom:14px}
+.act .lbl{font-size:14px;font-weight:500;color:#1A1E18;line-height:1.3;margin-bottom:4px}
+.act .desc{font-size:11px;color:#5E6B5A}
+.act-danger{border-color:#F4C0D1;background:#FBEAF0}
+.act-danger:hover{border-color:#A32D2D;background:#FBEAF0}
+.act-danger .ic{background:rgba(163,45,45,.1);color:#A32D2D}
+.act-danger .lbl{color:#A32D2D}
+.act-danger .desc{color:#A32D2D;opacity:.7}
+h2,h3{font-weight:400}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:24px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:24px}
+.tar-grid{display:grid;grid-template-columns:1.05fr 1.6fr;gap:28px;align-items:stretch}
+.tar-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:1100px){.tar-grid{grid-template-columns:1fr}.tar-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.grid3,.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:14px">
+<div style="display:flex;align-items:center;gap:14px">
+<span style="font-size:24px;font-weight:700;letter-spacing:-.03em;color:#1A6B1A">Possibility<span style="font-size:11px;vertical-align:super;font-weight:400">®</span></span>
+<span style="width:1px;height:20px;background:#DCE4D8"></span>
+<p style="font-size:14px;color:#5E6B5A;margin:0">Bienvenido, <span style="font-weight:500;color:#1A1E18">Felipe</span></p>
+<button class="ic-btn" id="bSet" title="Ajustes del suministro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+</div>
+<select class="ps" id="sup">
+<option value="sum1" selected>Suministro 1 — C/ Ortega y Gasset 24, 4ºB</option>
+<option value="sum2">Suministro 2 — Av. Diagonal 421, Local 2</option>
+<option value="sum3">Suministro 3 — Plaza del Ayuntamiento 15</option>
+</select>
+</div>
+
+<div style="position:relative;border-radius:24px;overflow:hidden;height:340px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,.06)">
+<img id="hi" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&q=85&auto=format&fit=crop" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.15) 50%,rgba(0,0,0,.55) 100%)"></div>
+<div style="position:absolute;top:22px;left:22px;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:100px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);font-size:12px;font-weight:500"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="zn">Madrid · Salamanca</span></div>
+<div style="position:absolute;top:22px;right:22px;display:flex;gap:7px">
+<div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center" title="Luz"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D49B2A" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+<div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center" title="Gas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z"/></svg></div>
+</div>
+<div style="position:absolute;bottom:78px;left:30px;right:30px;color:#fff">
+<p style="font-size:13px;font-weight:500;opacity:.9;margin-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.3)" id="st">Tu hogar conectado · Vivienda residencial</p>
+<h2 style="font-family:'Playfair Display',serif;font-size:48px;letter-spacing:-.02em;line-height:1.1;text-shadow:0 2px 20px rgba(0,0,0,.4)" id="dr">C/ Ortega y Gasset 24, 4ºB</h2>
+</div>
+<div style="position:absolute;bottom:22px;left:30px;display:flex;gap:5px;padding:5px;border-radius:100px;background:rgba(255,255,255,.18);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25)">
+<button class="pt a" data-tab="resumen">Resumen</button>
+<button class="pt" data-tab="consumo">Consumo</button>
+<button class="pt" data-tab="facturas">Facturas</button>
+<button class="pt" data-tab="tarifa">Tarifa</button>
+</div>
+</div>
+
+<div id="p-resumen" class="grid3">
+<div class="pc" style="padding:24px;display:flex;flex-direction:column;justify-content:space-between">
+<div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+<div style="width:30px;height:30px;border-radius:9px;background:rgba(26,107,26,.1);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="#1A6B1A" stroke-width="1.5"><path d="M4 2h12a1 1 0 011 1v14l-2.5-1.5L12 17l-2.5-1.5L7 17l-2.5-1.5L2 17V3a1 1 0 011-1z"/><path d="M7 6h6M7 9h4"/></svg></div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase">Última factura</p>
+</div>
+<div style="display:flex;align-items:baseline;gap:5px;margin-bottom:5px">
+<span style="font-family:'Playfair Display',serif;font-size:48px;letter-spacing:-.02em;line-height:1" id="fi">87,50</span>
+<span style="font-size:20px;color:#5E6B5A;font-weight:300">€</span>
+</div>
+<p style="font-size:12px;color:#5E6B5A;margin-bottom:8px"><span id="fp">Mar 2026</span> · <span id="fn">F-2026-001</span></p>
+<span class="bd"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-7"/></svg>Pagada</span>
+</div>
+<button class="pb" style="margin-top:18px"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 8l4 4 4-4M2 13h12"/></svg>Descargar PDF</button>
+</div>
+
+<div class="pc" style="padding:24px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+<div style="width:30px;height:30px;border-radius:9px;background:rgba(45,138,45,.1);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2D8A2D" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase">Ahorro 2026 vs mercado</p>
+</div>
+<div style="display:flex;align-items:baseline;gap:5px;margin-bottom:14px">
+<span style="font-family:'Playfair Display',serif;font-size:48px;letter-spacing:-.02em;color:#1A6B1A;line-height:1" id="an">1.581</span>
+<span style="font-size:20px;color:#5E6B5A;font-weight:300">€</span>
+</div>
+<div style="display:flex;align-items:flex-end;gap:3px;height:44px;margin-bottom:14px" id="ab"></div>
+<div style="display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid #DCE4D8;font-size:12px">
+<div><p style="color:#5E6B5A;margin-bottom:2px">Tu coste</p><p style="font-weight:500;color:#1A1E18;font-size:14px" id="tc">1.581 €</p></div>
+<div style="text-align:right"><p style="color:#5E6B5A;margin-bottom:2px">Media mercado</p><p style="font-weight:500;color:#5E6B5A;font-size:14px;text-decoration:line-through" id="mm">3.162 €</p></div>
+</div>
+</div>
+
+<div class="pc" style="padding:24px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="width:30px;height:30px;border-radius:9px;background:rgba(26,107,26,.1);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1A6B1A" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 17l4-4 4 4 5-5"/></svg></div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase">Tu tarifa vs competencia</p>
+</div>
+<div style="display:flex;align-items:center;gap:5px;margin-bottom:16px;font-size:11px;color:#1A6B1A;font-weight:500">
+<span class="live"></span>Monitorización activa · revisamos tu factura cada mes
+</div>
+<div style="display:flex;align-items:flex-end;gap:7px;height:120px;margin-bottom:12px" id="cb"></div>
+<div style="display:flex;gap:7px" id="cl"></div>
+</div>
+</div>
+
+<div id="p-consumo" class="grid2" style="display:none">
+<div class="pc" style="padding:24px">
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px">Tu día energético</p>
+<div style="display:flex;justify-content:center"><svg width="220" height="220" viewBox="0 0 220 220" id="rad"></svg></div>
+</div>
+<div class="pc" style="padding:24px">
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px">Consumo mensual</p>
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:18px">
+<span style="font-family:'Playfair Display',serif;font-size:42px;letter-spacing:-.02em" id="cv">160 kWh</span>
+<span class="bd" id="cc">-12%</span>
+</div>
+<svg width="100%" height="70" viewBox="0 0 200 70" id="cch"></svg>
+<p style="font-size:11px;color:#5E6B5A;margin-top:10px">Últimos 12 meses</p>
+</div>
+</div>
+
+<div id="p-facturas" style="display:none;margin-bottom:24px">
+<div class="pc" style="overflow:hidden">
+<table style="width:100%;border-collapse:collapse;font-size:14px">
+<thead><tr style="background:#F0F3EE">
+<th style="text-align:left;padding:14px 20px;font-weight:500;font-size:11px;color:#5E6B5A;text-transform:uppercase;letter-spacing:.06em">Nº</th>
+<th style="text-align:left;padding:14px 20px;font-weight:500;font-size:11px;color:#5E6B5A;text-transform:uppercase;letter-spacing:.06em">Fecha</th>
+<th style="text-align:left;padding:14px 20px;font-weight:500;font-size:11px;color:#5E6B5A;text-transform:uppercase;letter-spacing:.06em">Importe</th>
+<th style="text-align:left;padding:14px 20px;font-weight:500;font-size:11px;color:#5E6B5A;text-transform:uppercase;letter-spacing:.06em">Estado</th>
+<th style="padding:14px 20px"></th>
+</tr></thead>
+<tbody id="fr"></tbody>
+</table>
+</div>
+</div>
+
+<div id="p-tarifa" style="display:none;margin-bottom:24px">
+<div class="pc" style="padding:28px">
+<div class="tar-grid">
+
+<div style="padding-left:20px;border-left:4px solid #1A6B1A;display:flex;flex-direction:column;justify-content:center">
+<p style="font-size:11px;font-weight:500;color:#1A6B1A;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Tu tarifa actual con Contigo Energía</p>
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">
+<span style="font-family:'Playfair Display',serif;font-size:54px;font-weight:400;letter-spacing:-.02em;line-height:1" id="tk">€0,0890</span>
+<span style="font-size:16px;color:#5E6B5A">/kWh</span>
+</div>
+<p style="font-size:13px;color:#5E6B5A;margin-bottom:20px">Coste medio mensual: <strong style="color:#1A1E18;font-weight:500" id="tm">78€</strong></p>
+<div style="padding:18px 28px;border-radius:18px;background:#F1F8F1;text-align:center;width:fit-content">
+<p style="font-size:11px;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Más barata que la media</p>
+<p style="font-size:30px;font-weight:500;color:#1A6B1A;line-height:1">32%</p>
+</div>
+</div>
+
+<div class="tar-actions">
+<button class="act">
+<div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+<p class="lbl">Modificar potencia</p>
+<p class="desc">Actual: 4,6 kW</p>
+</button>
+<button class="act">
+<div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div>
+<p class="lbl">Cambio de titular</p>
+<p class="desc">Transferir a otra persona</p>
+</button>
+<button class="act">
+<div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18"/><path d="M7 17l4-4 4 4 5-5"/></svg></div>
+<p class="lbl">Cambiar tarifa</p>
+<p class="desc">Compara y solicita</p>
+</button>
+<button class="act act-danger">
+<div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+<p class="lbl">Dar de baja</p>
+<p class="desc">Cancelar suministro</p>
+</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="envio-block" style="position:relative;border-radius:24px;overflow:hidden;min-height:220px;box-shadow:0 8px 32px rgba(0,0,0,.06);transition:all .35s">
+<img src="https://images.unsplash.com/photo-1632934607261-9d36e2305f55?w=1600&q=85&auto=format&fit=crop" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,58,13,.88) 0%,rgba(13,58,13,.55) 60%,rgba(13,58,13,.25) 100%)"></div>
+<div id="envio-front" style="position:relative;padding:32px 36px;color:#fff">
+<p style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin:0 0 6px">Tu próximo envío Possibility®</p>
+<h3 style="font-family:'Playfair Display',serif;font-size:34px;letter-spacing:-.02em;margin:0 0 6px">Llega en 87 días</h3>
+<p style="font-size:14px;opacity:.9;max-width:520px;line-height:1.5;margin:0 0 28px">Esta vez recibirás un <strong>aceite de oliva virgen extra</strong> de un molino familiar de Jaén · primera prensada en frío, sin filtrar.</p>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+<div style="display:flex;gap:24px;align-items:baseline">
+<div><p style="font-size:11px;opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin:0">Faltan</p><p style="font-size:30px;font-weight:500;font-family:'Playfair Display',serif;margin:0">87 <span style="font-size:13px;font-weight:400;opacity:.7">días</span></p></div>
+<div><p style="font-size:11px;opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin:0">Tu velocidad</p><p style="font-size:17px;font-weight:500;margin:0" id="vel">×1.4</p></div>
+</div>
+<button class="pg" id="acel">Acelerar mi envío <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 10h10M11 6l4 4-4 4"/></svg></button>
+</div>
+</div>
+<div id="envio-back" style="display:none;position:relative;padding:32px 36px;color:#fff">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap">
+<div>
+<p style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin:0 0 4px">Acelera tu envío</p>
+<h3 style="font-family:'Playfair Display',serif;font-size:26px;letter-spacing:-.02em;margin:0">Activa boosters · velocidad <span id="vel2">×1.4</span></h3>
+</div>
+<button class="pg" id="cerrar"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8"/></svg> Cerrar</button>
+</div>
+<div id="boosters" style="display:flex;flex-direction:column;gap:8px;max-width:600px"></div>
+</div>
+</div>
+
+</div>
+
+<div class="modal-bg" id="modalAjustes">
+<div class="modal" onclick="event.stopPropagation()">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
+<div>
+<h3>Ajustes del suministro</h3>
+<p style="font-size:12px;color:#5E6B5A;margin:4px 0 0" id="ajt-dir">C/ Ortega y Gasset 24, 4ºB</p>
+</div>
+<button class="ic-btn" id="cerrarAj" style="width:32px;height:32px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+</div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin:18px 0 8px">Datos personales</p>
+<div class="modal-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0">Modificar datos personales</p><p style="font-size:12px;color:#5E6B5A;margin:2px 0 0">Email, teléfono, IBAN</p></div></div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin:18px 0 8px">Contrato</p>
+<div class="modal-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0">Modificar potencia contratada</p><p style="font-size:12px;color:#5E6B5A;margin:2px 0 0">Actual: 4,6 kW</p></div></div>
+<div class="modal-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0">Cambio de titular</p><p style="font-size:12px;color:#5E6B5A;margin:2px 0 0">Transferir a otra persona</p></div></div>
+<div class="modal-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 17l4-4 4 4 5-5"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0">Cambiar tarifa</p><p style="font-size:12px;color:#5E6B5A;margin:2px 0 0">Compara y solicita el cambio</p></div></div>
+<p style="font-size:11px;font-weight:500;color:#5E6B5A;letter-spacing:.06em;text-transform:uppercase;margin:18px 0 8px">Otras gestiones</p>
+<div class="modal-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0">Otra petición</p><p style="font-size:12px;color:#5E6B5A;margin:2px 0 0">Reclamación, duda, solicitud libre</p></div></div>
+<div class="modal-row" style="border-color:#F4C0D1;background:#FBEAF0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><div style="flex:1"><p style="font-weight:500;font-size:14px;margin:0;color:#A32D2D">Dar de baja</p><p style="font-size:12px;color:#A32D2D;opacity:.7;margin:2px 0 0">Cancelar suministro</p></div></div>
+</div>
+</div>
+
+<script>
+const D={
+sum1:{tipo:"residencial",direccion:"C/ Ortega y Gasset 24, 4ºB",zona:"Madrid · Salamanca",sub:"Tu hogar conectado · Vivienda residencial",img:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&q=85&auto=format&fit=crop",fact:{imp:"87,50",per:"Mar 2026",num:"F-2026-001"},an:"1.581",tc:"1.581 €",mm:"3.162 €",ab:[40,55,60,75,80,95,110,120,135,150,160,175],cv:"160 kWh",cc:"-12%",cd:[320,290,310,280,260,240,220,210,195,180,170,160],ph:[3,2,1,1,1,1,2,4,3,2,1,1,1,1,2,3,4,6,8,9,10,9,7,5],tk:"€0,0890",tm:"78€",base:78},
+sum2:{tipo:"restauracion",direccion:"Av. Diagonal 421, Local 2",zona:"Barcelona · Eixample",sub:"Tu negocio en marcha · Restauración",img:"https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1600&q=85&auto=format&fit=crop",fact:{imp:"134,20",per:"Mar 2026",num:"F-2026-101"},an:"2.840",tc:"2.840 €",mm:"5.680 €",ab:[60,80,95,115,130,155,180,210,240,275,310,350],cv:"510 kWh",cc:"-8%",cd:[580,610,595,620,600,590,570,560,545,530,520,510],ph:[5,5,4,4,4,4,5,6,7,8,9,10,10,9,7,6,7,8,9,10,10,9,7,6],tk:"€0,0940",tm:"142€",base:142},
+sum3:{tipo:"empresa",direccion:"Plaza del Ayuntamiento 15, 1ºB",zona:"Valencia · Centro",sub:"Tu espacio de trabajo · Empresa",img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=85&auto=format&fit=crop",fact:{imp:"62,10",per:"Mar 2026",num:"F-2026-201"},an:"1.290",tc:"1.290 €",mm:"2.580 €",ab:[30,42,52,65,78,90,104,118,130,145,158,170],cv:"145 kWh",cc:"-15%",cd:[210,200,195,190,185,178,172,168,162,155,150,145],ph:[1,1,1,1,1,1,2,4,8,9,10,10,9,10,10,10,9,8,5,2,1,1,1,1],tk:"€0,0840",tm:"65€",base:65}
+};
+const FM=[{n:"F-2026-001",f:"2026-03-01"},{n:"F-2026-002",f:"2026-02-01"},{n:"F-2026-003",f:"2026-01-01"},{n:"F-2025-012",f:"2025-12-01"},{n:"F-2025-011",f:"2025-11-01"}];
+const BOOSTERS=[
+{id:"sumExtra",lbl:"Traer otro suministro",desc:"Añade luz o gas",mult:0.2,on:false},
+{id:"whatsapp",lbl:"Activación comunicación por WhatsApp",desc:"Avisos rápidos al móvil",mult:0.2,on:false},
+{id:"autocontrato",lbl:"Activación autocontrato",desc:"Renovación automática y firma sin papeleo",mult:0.5,on:false}
+];
+const baseVel=1.4;
+
+function ab(arr){const m=Math.max(...arr);return arr.map((v,i)=>{const h=(v/m)*100,l=i===arr.length-1;return`<div style="flex:1;height:${h}%;background:${l?'#1A6B1A':'#E2F0E2'};border-radius:3px;min-height:4px"></div>`}).join("")}
+function comp(b){
+const c=[{n:"Contigo Energía",m:b,k:(b/720).toFixed(4),y:1},{n:"EnerVerde",m:Math.round(b*1.18),k:((b*1.21)/720).toFixed(4)},{n:"SolNatural",m:Math.round(b*1.32),k:((b*1.35)/720).toFixed(4)},{n:"LuzPlena",m:Math.round(b*1.48),k:((b*1.51)/720).toFixed(4)},{n:"EcoWatt",m:Math.round(b*1.62),k:((b*1.66)/720).toFixed(4)}];
+const max=Math.max(...c.map(x=>x.m));
+document.getElementById("cb").innerHTML=c.map(x=>{const h=(x.m/max)*100;return`<div class="bw ${x.y?'y':''}"><div class="tt">${x.k}€/kWh</div><span style="font-size:11px;font-weight:${x.y?500:400};color:${x.y?'#1A6B1A':'#1A1E18'}">${x.m}€</span><div class="bs" style="width:100%;height:${h}%;background:${x.y?'#1A6B1A':'#E5EBE2'};border-radius:7px 7px 0 0;min-height:8px;transition:background .2s"></div></div>`}).join("");
+document.getElementById("cl").innerHTML=c.map(x=><span style="flex:1;font-size:10px;text-align:center;font-weight:${x.y?500:400};color:${x.y?'#1A6B1A':'#5E6B5A'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.n}</span>).join("");
+}
+function rad(arr){const cx=110,cy=110,R=82,ri=30,nh=new Date().getHours();let s=<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#DCE4D8" stroke-width="1" opacity=".5"/><circle cx="${cx}" cy="${cy}" r="${ri}" fill="#F0F3EE" stroke="#DCE4D8"/>;arr.forEach((v,h)=>{const a=(h/24)Math.PI*2-Math.PI/2,bl=ri+(v/10)(R-ri),x1=cx+Math.cos(a)(ri+4),y1=cy+Math.sin(a)(ri+4),x2=cx+Math.cos(a)bl,y2=cy+Math.sin(a)*bl,c=h===nh;s+=<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c?'#1A6B1A':'#2D8A2D'}" stroke-width="${c?6:4.5}" stroke-linecap="round" opacity="${c?1:0.4}"/>});[0,6,12,18].forEach(h=>{const a=(h/24)*Math.PI*2-Math.PI/2,x=cx+Math.cos(a)(R+14),y=cy+Math.sin(a)*(R+14);s+=<text x="${x}" y="${y+1}" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="500" fill="#5E6B5A">${h}h</text>});s+=<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="500" fill="#1A6B1A">${nh}h</text>;document.getElementById("rad").innerHTML=s}
+function ch(arr){const M=Math.max(...arr),m=Math.min(...arr),p=arr.map((v,i)=>${(i/(arr.length-1))*200},${70-((v-m)/(M-m||1))*70}).join(" ");document.getElementById("cch").innerHTML=<polyline points="${p}" fill="none" stroke="#1A6B1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>}
+function fact(bi){const b=parseFloat(bi.replace(",",".")),fa=[1,1.05,1.20,1.35,1.10];document.getElementById("fr").innerHTML=FM.map((f,i)=>{const im=(b*fa[i]).toFixed(2).replace(".",",");return`<tr style="border-top:1px solid #DCE4D8"><td style="padding:14px 20px;font-weight:500">${f.n}</td><td style="padding:14px 20px;color:#5E6B5A">${f.f}</td><td style="padding:14px 20px;font-weight:500">€${im}</td><td style="padding:14px 20px"><span class="bd"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l4 4 6-7"/></svg>Pagada</span></td><td style="padding:14px 20px"><button style="padding:7px 14px;border:1px solid #DCE4D8;background:#fff;border-radius:8px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 8l4 4 4-4M2 13h12"/></svg>PDF</button></td></tr>`}).join("")}
+function calcVel(){let v=baseVel;BOOSTERS.forEach(b=>{if(b.on)v+=b.mult});return v.toFixed(1)}
+function renderBoosters(){
+document.getElementById("boosters").innerHTML=BOOSTERS.map(b=><div class="boost-row ${b.on?'on':''}" data-id="${b.id}"><div style="flex:1"><p style="font-size:14px;font-weight:500;margin:0">${b.lbl}</p><p style="font-size:11px;opacity:.75;margin:2px 0 0">${b.desc}</p></div><span style="font-size:12px;font-weight:600;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:100px;margin-right:10px">×${b.mult.toFixed(1)}</span><div class="toggle ${b.on?'on':''}"></div></div>).join("");
+document.querySelectorAll("#boosters .boost-row").forEach(r=>r.addEventListener("click",()=>{const id=r.dataset.id;const b=BOOSTERS.find(x=>x.id===id);b.on=!b.on;renderBoosters();const v=calcVel();document.getElementById("vel").textContent="×"+v;document.getElementById("vel2").textContent="×"+v}));
+}
+function aply(id){const d=D[id];document.getElementById("hi").src=d.img;document.getElementById("zn").textContent=d.zona;document.getElementById("dr").textContent=d.direccion;document.getElementById("st").textContent=d.sub;document.getElementById("fi").textContent=d.fact.imp;document.getElementById("fp").textContent=d.fact.per;document.getElementById("fn").textContent=d.fact.num;document.getElementById("an").textContent=d.an;document.getElementById("tc").textContent=d.tc;document.getElementById("mm").textContent=d.mm;document.getElementById("cv").textContent=d.cv;document.getElementById("cc").textContent=d.cc;document.getElementById("tk").textContent=d.tk;document.getElementById("tm").textContent=d.tm;document.getElementById("ajt-dir").textContent=d.direccion;document.getElementById("ab").innerHTML=ab(d.ab);comp(d.base);rad(d.ph);ch(d.cd);fact(d.fact.imp)}
+function tab(n){["resumen","consumo","facturas","tarifa"].forEach(t=>{const e=document.getElementById("p-"+t);if(e)e.style.display=t===n?(t==="resumen"||t==="consumo"?"grid":"block"):"none"});document.querySelectorAll(".pt").forEach(b=>b.classList.toggle("a",b.dataset.tab===n))}
+document.getElementById("sup").addEventListener("change",e=>aply(e.target.value));
+document.querySelectorAll(".pt").forEach(b=>b.addEventListener("click",e=>tab(e.target.dataset.tab)));
+document.getElementById("acel").addEventListener("click",()=>{document.getElementById("envio-front").style.display="none";document.getElementById("envio-back").style.display="block";renderBoosters()});
+document.getElementById("cerrar").addEventListener("click",()=>{document.getElementById("envio-back").style.display="none";document.getElementById("envio-front").style.display="block"});
+document.getElementById("bSet").addEventListener("click",()=>document.getElementById("modalAjustes").classList.add("show"));
+document.getElementById("cerrarAj").addEventListener("click",()=>document.getElementById("modalAjustes").classList.remove("show"));
+document.getElementById("modalAjustes").addEventListener("click",e=>{if(e.target.id==="modalAjustes")document.getElementById("modalAjustes").classList.remove("show")});
+aply("sum1");
+</script>
+</body>
+</html>

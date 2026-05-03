@@ -1,0 +1,21 @@
+{
+  "name": "possibility-area-cliente",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Possibility® Área Cliente — energy invoice management dashboard (FastAPI + React)",
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "dev:web": "npm -w apps/web run dev",
+    "dev:api": "cd apps/api && python -m uvicorn app.main:app --reload --port 4000",
+    "build:web": "npm -w apps/web run build",
+    "lint:web": "npm -w apps/web run lint",
+    "typecheck:web": "npm -w apps/web run typecheck",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "engines": { "node": ">=20" }
+}
