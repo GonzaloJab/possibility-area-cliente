@@ -25,12 +25,12 @@ export function ConsumoTab({ supply }: Props) {
 
   return (
     <div className="grid2">
-      <div className="pc" style={{ padding: 24 }}>
+      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
         <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 14 }}>
           Tu día energético
         </p>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <svg width="220" height="220" viewBox="0 0 220 220">
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <svg width="220" height="220" viewBox="0 0 220 220" style={{ width: 'min(220px, 100%)', height: 'auto', aspectRatio: '1 / 1' }}>
             <circle cx={cx} cy={cy} r={R} fill="none" stroke="var(--line)" strokeWidth="1" opacity=".5" />
             <circle cx={cx} cy={cy} r={ri} fill="#F0F3EE" stroke="var(--line)" />
             {hourly.map((v, h) => {
@@ -48,7 +48,7 @@ export function ConsumoTab({ supply }: Props) {
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke={current ? 'var(--green)' : '#2D8A2D'}
+                  stroke={current ? 'var(--accent-green)' : '#2d8a2d'}
                   strokeWidth={current ? 6 : 4.5}
                   strokeLinecap="round"
                   opacity={current ? 1 : 0.4}
@@ -72,15 +72,15 @@ export function ConsumoTab({ supply }: Props) {
         </div>
       </div>
 
-      <div className="pc" style={{ padding: 24 }}>
+      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
         <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 14 }}>
           Consumo mensual
         </p>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 18 }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, letterSpacing: '-.02em' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
+          <span className="t-display-sm">
             {Number(lastConsumption?.totalKwh ?? 0).toFixed(0)} kWh
           </span>
-          <span className="bd">
+          <span className="bd bd--muted">
             {(lastConsumption?.changePercent ?? 0) > 0 ? '+' : ''}
             {lastConsumption?.changePercent ?? 0}%
           </span>

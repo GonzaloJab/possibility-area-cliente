@@ -21,6 +21,16 @@ app.add_middleware(
 )
 
 
+@app.get("/", tags=["meta"])
+async def root() -> dict:
+    """Bare GET / avoids 404 when opening the API base URL in a browser."""
+    return {
+        "service": "Possibility Área Cliente API",
+        "health": "/health",
+        **({"docs": "/docs"} if settings.ENV != "production" else {}),
+    }
+
+
 @app.get("/health", tags=["meta"])
 async def health() -> dict:
     return {"ok": True, "env": settings.ENV}

@@ -17,8 +17,12 @@ Energy invoice management dashboard for Possibility® clients.
 You only need **Docker Desktop** and **git** installed locally.
 
 ```bash
-cp .env.example .env       # adjust if needed; defaults work out of the box
-docker compose up --build  # spins up Postgres + FastAPI + React (nginx)
+cp .env.example .env
+# Optional: copy local.env.example → local.env — overrides .env for localhost CORS / VITE_API_URL while .env keeps Neon
+npm run docker:up           # same as: docker + .env (+ local.env if present)
+
+# Bundled Postgres container (no Neon URLs needed in .env for DB):
+npm run docker:up:postgres
 ```
 
 - Frontend: <http://localhost:5173>
@@ -28,27 +32,18 @@ docker compose up --build  # spins up Postgres + FastAPI + React (nginx)
 The api container automatically runs `alembic upgrade head` and seeds 3 supplies on first boot.
 
 ### Iterative dev (without Docker)
-If you'd rather run services natively for faster reloads:
+From repo root (loads `.env` + optional `local.env`):
 
 ```bash
-# 1. Start just Postgres in Docker
-docker compose up -d postgres
-
-# 2. API (Python 3.12)
-cd apps/api
-python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp ../../.env.example .env
-alembic upgrade head
-python seed.py
-uvicorn app.main:app --reload --port 4000
-
-# 3. Web (Node 20+) — in another terminal
-cd apps/web
+cp .env.example .env
+cp local.env.example local.env   # keeps CORS + VITE_* on localhost while .env can use Neon
 npm install
-echo "VITE_API_URL=http://localhost:4000" > .env
 npm run dev
 ```
+
+Manual split: use **Neon** or start only Postgres with  
+`docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d postgres`,  
+then in `apps/api` run `alembic`, `seed.py`, `uvicorn` with `DATABASE_URL` pointing at `localhost:5432`.
 
 ### Database migrations
 

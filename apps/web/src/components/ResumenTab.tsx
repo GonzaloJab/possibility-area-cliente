@@ -33,7 +33,15 @@ export function ResumenTab({ supply }: Props) {
   return (
     <div className="grid3">
       {/* ─── Última factura ─── */}
-      <div className="pc" style={{ padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div
+        className="pc"
+        style={{
+          padding: 'clamp(16px, 4vw, 24px)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(26,107,26,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -47,15 +55,13 @@ export function ResumenTab({ supply }: Props) {
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginBottom: 5 }}>
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 48, letterSpacing: '-.02em', lineHeight: 1 }}>
-              {lastInvoice ? Number(lastInvoice.amount).toFixed(2).replace('.', ',') : '—'}
-            </span>
-            <span style={{ fontSize: 20, color: 'var(--muted)', fontWeight: 300 }}>€</span>
+            <span className="t-display">{lastInvoice ? Number(lastInvoice.amount).toFixed(2).replace('.', ',') : '—'}</span>
+            <span style={{ fontSize: 'clamp(14px, 4vw, 20px)', color: 'var(--muted)', fontWeight: 500 }}>€</span>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
             {lastInvoice?.period} · {lastInvoice?.number}
           </p>
-          <span className="bd">
+          <span className="bd bd--success">
             <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M3 8l4 4 6-7" />
             </svg>
@@ -71,7 +77,7 @@ export function ResumenTab({ supply }: Props) {
       </div>
 
       {/* ─── Ahorro 2026 ─── */}
-      <div className="pc" style={{ padding: 24 }}>
+      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
           <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(45,138,45,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2D8A2D" strokeWidth="2">
@@ -83,10 +89,10 @@ export function ResumenTab({ supply }: Props) {
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginBottom: 14 }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 48, letterSpacing: '-.02em', color: 'var(--green)', lineHeight: 1 }}>
+          <span className="t-display" style={{ color: 'var(--accent-green)' }}>
             {savings.toLocaleString('es-ES')}
           </span>
-          <span style={{ fontSize: 20, color: 'var(--muted)', fontWeight: 300 }}>€</span>
+          <span style={{ fontSize: 'clamp(14px, 4vw, 20px)', color: 'var(--muted)', fontWeight: 500 }}>€</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 44, marginBottom: 14 }}>
           {monthlyCosts.map((v, i) => {
@@ -98,7 +104,7 @@ export function ResumenTab({ supply }: Props) {
                 style={{
                   flex: 1,
                   height: `${h}%`,
-                  background: last ? 'var(--green)' : 'var(--green-bg)',
+                  background: last ? 'var(--accent-green)' : 'var(--green-bg)',
                   borderRadius: 3,
                   minHeight: 4,
                 }}
@@ -121,7 +127,7 @@ export function ResumenTab({ supply }: Props) {
       </div>
 
       {/* ─── Tu tarifa vs competencia ─── */}
-      <div className="pc" style={{ padding: 24 }}>
+      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
           <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(26,107,26,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2">

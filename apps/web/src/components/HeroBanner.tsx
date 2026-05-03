@@ -16,20 +16,17 @@ const TABS: { key: TabKey; label: string }[] = [
 
 export function HeroBanner({ supply, activeTab, onTabChange }: Props) {
   return (
-    <div
-      style={{
-        position: 'relative',
-        borderRadius: 24,
-        overflow: 'hidden',
-        height: 340,
-        marginBottom: 20,
-        boxShadow: '0 8px 32px rgba(0,0,0,.06)',
-      }}
-    >
+    <div className="hero-banner">
       <img
         src={supply.heroImageUrl ?? ''}
         alt={supply.address}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
       />
       <div
         style={{
@@ -42,17 +39,17 @@ export function HeroBanner({ supply, activeTab, onTabChange }: Props) {
       <div
         style={{
           position: 'absolute',
-          top: 22,
-          left: 22,
+          top: 'clamp(10px, 3vw, 22px)',
+          left: 'clamp(10px, 3vw, 22px)',
           display: 'inline-flex',
           alignItems: 'center',
           gap: 6,
-          padding: '8px 14px',
+          padding: '6px 11px',
           borderRadius: 100,
           background: 'rgba(255,255,255,.92)',
           backdropFilter: 'blur(12px)',
-          fontSize: 12,
-          fontWeight: 500,
+          fontSize: 'clamp(10px, 2.8vw, 12px)',
+          fontWeight: 600,
         }}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -61,74 +58,81 @@ export function HeroBanner({ supply, activeTab, onTabChange }: Props) {
         </svg>
         {supply.zone}
       </div>
-      <div style={{ position: 'absolute', top: 22, right: 22, display: 'flex', gap: 7 }}>
-        <div
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: 12,
-            background: 'rgba(255,255,255,.92)',
-            backdropFilter: 'blur(12px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          title="Luz"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D49B2A" strokeWidth="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-        </div>
-        <div
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: 12,
-            background: 'rgba(255,255,255,.92)',
-            backdropFilter: 'blur(12px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          title="Gas"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" strokeWidth="2">
-            <path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z" />
-          </svg>
-        </div>
-      </div>
-      <div style={{ position: 'absolute', bottom: 78, left: 30, right: 30, color: '#fff' }}>
-        <p style={{ fontSize: 13, fontWeight: 500, opacity: 0.9, marginBottom: 5, textShadow: '0 1px 8px rgba(0,0,0,.3)' }}>
-          {supply.subtitle}
-        </p>
-        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 48, letterSpacing: '-.02em', lineHeight: 1.1, textShadow: '0 2px 20px rgba(0,0,0,.4)' }}>
-          {supply.address}
-        </h2>
+      <div
+        style={{
+          position: 'absolute',
+          top: 'clamp(10px, 3vw, 22px)',
+          right: 'clamp(10px, 3vw, 22px)',
+          display: 'flex',
+          gap: 7,
+        }}
+      >
+        {[
+          { title: 'Luz', stroke: '#D49B2A' },
+          { title: 'Gas', stroke: '#E24B4A' },
+        ].map(({ title, stroke }) => (
+          <div
+            key={title}
+            title={title}
+            style={{
+              width: 'clamp(32px, 8vw, 38px)',
+              height: 'clamp(32px, 8vw, 38px)',
+              borderRadius: 12,
+              background: 'rgba(255,255,255,.92)',
+              backdropFilter: 'blur(12px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {title === 'Luz' ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2">
+                <path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z" />
+              </svg>
+            )}
+          </div>
+        ))}
       </div>
       <div
         style={{
           position: 'absolute',
-          bottom: 22,
-          left: 30,
-          display: 'flex',
-          gap: 5,
-          padding: 5,
-          borderRadius: 100,
-          background: 'rgba(255,255,255,.18)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,.25)',
+          bottom: 'clamp(56px, 18vw, 78px)',
+          left: 'clamp(12px, 3vw, 30px)',
+          right: 'clamp(12px, 3vw, 30px)',
+          color: '#fff',
         }}
       >
+        <p
+          style={{
+            fontSize: 'clamp(11px, 2.8vw, 13px)',
+            fontWeight: 600,
+            opacity: 0.92,
+            marginBottom: 4,
+            textShadow: '0 1px 8px rgba(0,0,0,.3)',
+          }}
+        >
+          {supply.subtitle}
+        </p>
+        <h2 className="hero-title" style={{ color: '#fff' }}>
+          {supply.address}
+        </h2>
+      </div>
+      <nav className="hero-tabs" aria-label="Secciones del suministro">
         {TABS.map((t) => (
           <button
             key={t.key}
+            type="button"
             className={`pt ${activeTab === t.key ? 'a' : ''}`}
             onClick={() => onTabChange(t.key)}
           >
             {t.label}
           </button>
         ))}
-      </div>
+      </nav>
     </div>
   );
 }

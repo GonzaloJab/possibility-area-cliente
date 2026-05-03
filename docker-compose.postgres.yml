@@ -1,0 +1,32 @@
+# Optional: bundles a local Postgres 16 container + fixed internal URLs (no Neon).
+# docker compose -f docker-compose.yml -f docker-compose.postgres.yml up --build
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: possibility-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: possibility
+      POSTGRES_PASSWORD: possibility
+      POSTGRES_DB: possibility
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U possibility -d possibility"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://possibility:possibility@postgres:5432/possibility
+      DATABASE_URL_ASYNC: postgresql+asyncpg://possibility:possibility@postgres:5432/possibility
+
+volumes:
+  postgres_data:

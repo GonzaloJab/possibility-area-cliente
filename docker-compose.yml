@@ -1,57 +1,36 @@
-# Local-dev stack: Postgres + FastAPI + React (nginx)
-# Same Dockerfiles used in production (Render/Hetzner) — no drift.
-# Run: docker compose up --build
-services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: possibility-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: possibility
-      POSTGRES_PASSWORD: possibility
-      POSTGRES_DB: possibility
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U possibility -d possibility"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+# API + Web in Docker against Postgres URLs from repo-root `.env`.
+# Use Neon: set DATABASE_URL + DATABASE_URL_ASYNC in `.env` (same as native dev).
+# API runs Alembic + seed on boot → Felipe demo is created once in that database.
+#
+# Local Postgres container (offline): compose -f docker-compose.yml -f docker-compose.postgres.yml up --build
 
+services:
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     container_name: possibility-api
     restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://possibility:possibility@postgres:5432/possibility
-      DATABASE_URL_ASYNC: postgresql+asyncpg://possibility:possibility@postgres:5432/possibility
-      JWT_SECRET: dev-only-secret-change-me-to-something-long
-      JWT_EXPIRES_MINUTES: 10080
-      CORS_ORIGINS: http://localhost:5173
-      PORT: 4000
-      ENV: development
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env — Neon pooled URL recommended}
+      DATABASE_URL_ASYNC: ${DATABASE_URL_ASYNC:?Set DATABASE_URL_ASYNC in .env — postgresql+asyncpg with ?ssl=require}
+      JWT_SECRET: ${JWT_SECRET:-dev-docker-change-me-for-production}
+      JWT_EXPIRES_MINUTES: ${JWT_EXPIRES_MINUTES:-10080}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      PORT: ${PORT:-4000}
+      ENV: ${ENV:-development}
     ports:
-      - "4000:4000"
+      - "${API_PORT:-4000}:4000"
 
   web:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
       args:
-        VITE_API_URL: http://localhost:4000
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:4000}
     container_name: possibility-web
     restart: unless-stopped
     depends_on:
       - api
     ports:
-      - "5173:80"
-
-volumes:
-  postgres_data:
+      - "${WEB_PORT:-5173}:80"

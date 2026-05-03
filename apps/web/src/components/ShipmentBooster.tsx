@@ -32,9 +32,9 @@ export function ShipmentBooster() {
     <div
       style={{
         position: 'relative',
-        borderRadius: 24,
+        borderRadius: 'clamp(14px, 3vw, 24px)',
         overflow: 'hidden',
-        minHeight: 220,
+        minHeight: 'clamp(180px, 40vw, 220px)',
         boxShadow: '0 8px 32px rgba(0,0,0,.06)',
         transition: 'all .35s',
       }}
@@ -53,22 +53,30 @@ export function ShipmentBooster() {
         }}
       />
       {!expanded ? (
-        <div style={{ position: 'relative', padding: '32px 36px', color: '#fff' }}>
-          <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '.12em', textTransform: 'uppercase', opacity: 0.85, margin: '0 0 6px' }}>
+        <div style={{ position: 'relative', padding: 'clamp(16px, 5vw, 36px)', color: '#fff' }}>
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', opacity: 0.85, margin: '0 0 6px' }}>
             Tu próximo envío Possibility®
           </p>
-          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, letterSpacing: '-.02em', margin: '0 0 6px' }}>
+          <h3
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              fontSize: 'clamp(22px, 6vw, 34px)',
+              letterSpacing: '-.02em',
+              margin: '0 0 6px',
+            }}
+          >
             Llega en 87 días
           </h3>
-          <p style={{ fontSize: 14, opacity: 0.9, maxWidth: 520, lineHeight: 1.5, margin: '0 0 28px' }}>
+          <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', opacity: 0.9, maxWidth: 520, lineHeight: 1.5, margin: '0 0 clamp(14px, 4vw, 28px)' }}>
             Esta vez recibirás un <strong>aceite de oliva virgen extra</strong> de un molino familiar de Jaén · primera prensada en frío, sin filtrar.
           </p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', gap: 24, alignItems: 'baseline' }}>
               <div>
                 <p style={{ fontSize: 11, opacity: 0.7, letterSpacing: '.06em', textTransform: 'uppercase', margin: 0 }}>Faltan</p>
-                <p style={{ fontSize: 30, fontWeight: 500, fontFamily: "'Playfair Display', serif", margin: 0 }}>
-                  87 <span style={{ fontSize: 13, fontWeight: 400, opacity: 0.7 }}>días</span>
+                <p style={{ fontSize: 'clamp(22px, 6vw, 30px)', fontWeight: 700, fontFamily: 'var(--font-display)', margin: 0 }}>
+                  87 <span style={{ fontSize: 13, fontWeight: 500, opacity: 0.7 }}>días</span>
                 </p>
               </div>
               <div>
@@ -85,13 +93,13 @@ export function ShipmentBooster() {
           </div>
         </div>
       ) : (
-        <div style={{ position: 'relative', padding: '32px 36px', color: '#fff' }}>
+        <div style={{ position: 'relative', padding: 'clamp(16px, 5vw, 36px)', color: '#fff' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 16, flexWrap: 'wrap' }}>
             <div>
-              <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '.12em', textTransform: 'uppercase', opacity: 0.85, margin: '0 0 4px' }}>
+              <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', opacity: 0.85, margin: '0 0 4px' }}>
                 Acelera tu envío
               </p>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, letterSpacing: '-.02em', margin: 0 }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(18px, 5vw, 26px)', letterSpacing: '-.02em', margin: 0 }}>
                 Activa boosters · velocidad ×{velocity}
               </h3>
             </div>
