@@ -1,19 +1,17 @@
-"""Admin endpoints — pipe.possibility.es uses these.
+"""Admin endpoints — production: https://admin.possibility.es (or local :5174).
 
 All routes require role==ADMIN. Mounted at /admin.
 """
-from datetime import datetime
-from decimal import Decimal as PyDecimal
 from typing import List
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from sqlalchemy import desc, func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.db import get_db
 from app.deps import get_current_admin
-from app.models import Invoice, InvoiceStatus, Supply, User, UserRole
+from app.models import Invoice, Supply, User, UserRole
 from app.ocr import extract_invoice
 from app.ocr.extractor import is_stub
 from app.schemas import (

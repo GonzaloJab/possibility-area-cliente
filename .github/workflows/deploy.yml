@@ -57,3 +57,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,scope=${{ matrix.name }},mode=max
+          # Vite requires a non-empty VITE_* at build; .invalid is reserved — real URLs come from Render service env.
+          build-args: |
+            VITE_API_URL=https://vite-build.invalid
+            VITE_CLIENT_URL=https://vite-build.invalid

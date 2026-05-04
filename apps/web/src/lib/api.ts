@@ -1,13 +1,9 @@
 import type { Supply, Invoice, Consumption, Tariff, User } from '../types';
 
-/** Dev default `/api` uses Vite proxy → 127.0.0.1:4000 (avoids Windows `localhost`→IPv6 vs uvicorn on 127.0.0.1). */
+/** Dev: empty `VITE_API_URL` → `/api` (Vite proxy). Prod: set `VITE_API_URL` on Render when the Docker image builds — not from repo-root `.env` on your laptop. */
 const trimmed = String(import.meta.env.VITE_API_URL ?? '').trim();
 const API_URL =
-  trimmed !== ''
-    ? trimmed
-    : import.meta.env.DEV
-      ? '/api'
-      : 'http://127.0.0.1:4000';
+  trimmed !== '' ? trimmed : import.meta.env.DEV ? '/api' : '';
 const TOKEN_KEY = 'possibility_token';
 
 export const tokenStore = {
@@ -22,7 +18,30 @@ class ApiError extends Error {
   }
 }
 
+function assertProductionApiUrl(): void {
+  if (import.meta.env.DEV) return;
+  if (!API_URL.trim()) {
+    throw new ApiError(
+      503,
+      'VITE_API_URL was not set when this build was produced. On Render: possibility-web → Environment → VITE_API_URL = https://<your-public-api> → Clear build cache → Deploy.',
+    );
+  }
+  try {
+    const host = new URL(API_URL).hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      throw new ApiError(
+        503,
+        'VITE_API_URL still points at localhost — the Docker build used a wrong value. On Render: set VITE_API_URL to your public API (https://…) and redeploy.',
+      );
+    }
+  } catch (e) {
+    if (e instanceof ApiError) throw e;
+    throw new ApiError(503, 'VITE_API_URL is not a valid URL. Fix Render web service env and redeploy.');
+  }
+}
+
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  assertProductionApiUrl();
   const token = tokenStore.get();
   const res = await fetch(`${API_URL}${path}`, {
     ...init,

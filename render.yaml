@@ -26,8 +26,9 @@ services:
         generateValue: true
       - key: JWT_EXPIRES_MINUTES
         value: 10080
+      # Set in dashboard, e.g. https://clientes.possibility.es,https://admin.possibility.es
       - key: CORS_ORIGINS
-        sync: false  # comma-sep production origins, e.g. https://clientes.possibility.es,https://admin.possibility.es
+        sync: false
 
   - type: web
     name: possibility-web
@@ -39,8 +40,9 @@ services:
     branch: main
     autoDeploy: true
     envVars:
+      # Required for `vite build` inside Docker — must be your public API HTTPS origin (not repo .env).
       - key: VITE_API_URL
-        sync: false  # https://api.possibility.es (or possibility-api.onrender.com)
+        sync: false
 
   - type: web
     name: possibility-admin
@@ -53,8 +55,7 @@ services:
     autoDeploy: true
     envVars:
       - key: VITE_API_URL
-        sync: false  # same as web
+        sync: false  # same public HTTPS API as web, e.g. https://possibility-api.onrender.com
       - key: VITE_CLIENT_URL
-        sync: false  # public URL of the client app — "View as client" / impersonation links
-    # After deploy: Render → possibility-admin → Custom Domains → add admin.possibility.es
-    # Point DNS (GoDaddy or Cloudflare): CNAME admin → <render-hostname>.onrender.com (or Render’s instructed target).
+        sync: false  # public client app, e.g. https://clientes.possibility.es (impersonation / open-as-client)
+    # Custom domain: admin.possibility.es → DNS CNAME to Render’s target; redeploy after changing VITE_*.

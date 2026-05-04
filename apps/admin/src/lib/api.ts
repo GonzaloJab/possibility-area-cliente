@@ -2,14 +2,10 @@ import type {
   ClientDetail, ClientSummary, InvoiceImportItem, OcrPreview, Supply, User,
 } from '../types';
 
-/** Dev default `/api` uses Vite proxy → 127.0.0.1:4000 (same as client web). */
+/** Dev: empty `VITE_API_URL` → `/api`. Prod: set `VITE_API_URL` (+ `VITE_CLIENT_URL`) when the admin Docker image builds on Render. */
 const trimmed = String(import.meta.env.VITE_API_URL ?? '').trim();
 const API_URL =
-  trimmed !== ''
-    ? trimmed
-    : import.meta.env.DEV
-      ? '/api'
-      : 'http://127.0.0.1:4000';
+  trimmed !== '' ? trimmed : import.meta.env.DEV ? '/api' : '';
 const TOKEN_KEY = 'possibility_admin_token';
 
 export const tokenStore = {
@@ -22,11 +18,34 @@ class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
 
+function assertProductionApiUrl(): void {
+  if (import.meta.env.DEV) return;
+  if (!API_URL.trim()) {
+    throw new ApiError(
+      503,
+      'VITE_API_URL was not set when this build was produced. On Render: possibility-admin → Environment → VITE_API_URL = https://<your-public-api> → Clear build cache → Deploy.',
+    );
+  }
+  try {
+    const host = new URL(API_URL).hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      throw new ApiError(
+        503,
+        'VITE_API_URL still points at localhost. Set it to your public API (https://…) on the admin service and redeploy.',
+      );
+    }
+  } catch (e) {
+    if (e instanceof ApiError) throw e;
+    throw new ApiError(503, 'VITE_API_URL is not a valid URL. Fix Render admin service env and redeploy.');
+  }
+}
+
 async function request<T>(
   path: string,
   init: RequestInit = {},
   isJson = true,
 ): Promise<T> {
+  assertProductionApiUrl();
   const token = tokenStore.get();
   const headers: Record<string, string> = {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

@@ -7,7 +7,8 @@ RUN npm ci -w apps/web --include-workspace-root
 
 # ─── build stage ────────────────────────────────────────────────────
 FROM node:20-alpine AS build
-ARG VITE_API_URL=http://localhost:4000
+# No localhost default — Render must set VITE_API_URL or the browser will call the wrong host. docker-compose passes a build arg for local stacks.
+ARG VITE_API_URL=
 ENV VITE_API_URL=$VITE_API_URL
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules

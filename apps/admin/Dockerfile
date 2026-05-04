@@ -7,9 +7,11 @@ COPY apps/admin/package.json ./apps/admin/package.json
 RUN npm ci -w apps/admin --include-workspace-root
 
 # ─── build ────────────────────────────────────────────────────────
+# Render: set VITE_API_URL + VITE_CLIENT_URL on the service (build args). docker-compose sets args for local Docker.
+# Production admin at https://admin.possibility.es — API must allow that origin in CORS_ORIGINS.
 FROM node:20-alpine AS build
-ARG VITE_API_URL=http://localhost:4000
-ARG VITE_CLIENT_URL=http://localhost:5173
+ARG VITE_API_URL=
+ARG VITE_CLIENT_URL=
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_CLIENT_URL=$VITE_CLIENT_URL
 WORKDIR /app
