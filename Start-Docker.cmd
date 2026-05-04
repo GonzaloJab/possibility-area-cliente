@@ -14,6 +14,6 @@ if not exist ".env" (
   pause
   exit /b 1
 )
-echo [Docker + .env ^(+ local.env if present^)] http://localhost:4000  http://localhost:5173
+echo [Docker + .env ^(+ local.env if present^)] API http://localhost:4000  Client http://localhost:5173  Admin http://localhost:5174/login
 call npm run docker:up
 if errorlevel 1 pause

@@ -29,16 +29,11 @@ export function Login() {
   return (
     <div className="login-wrap">
       <div className="login-card">
-        <div style={{ marginBottom: 12 }}>
-          <span className="logo-wordmark">
-            Possibility<span className="logo-reg">®</span>
-          </span>
-          <span className="logo-subbrand" style={{ marginTop: 6 }}>
-            Sistemas energéticos
-          </span>
-        </div>
-        <h1 style={{ marginTop: 14 }}>Bienvenido</h1>
-        <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 26 }}>
+        <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-.03em', color: 'var(--green)' }}>
+          Possibility<span style={{ fontSize: 11, verticalAlign: 'super', fontWeight: 400 }}>®</span>
+        </span>
+        <h1 style={{ marginTop: 18 }}>Bienvenido</h1>
+        <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 28 }}>
           Inicia sesión para gestionar tus suministros.
         </p>
         <form onSubmit={handleSubmit}>

@@ -11,6 +11,12 @@ import { loadRootEnv } from "./root-env.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 loadRootEnv(root);
 
+// Root `.env` often sets `http://localhost:4000`; on Windows the browser may use IPv6 `::1` while uvicorn binds `127.0.0.1`, causing connection refused. Dropping only that default lets `apps/web` use `/api` (Vite → 127.0.0.1:4000). Set any other URL in `local.env` if you need a direct API base.
+const viteApi = process.env.VITE_API_URL?.trim();
+if (viteApi === "http://localhost:4000" || viteApi === "http://localhost:4000/") {
+  delete process.env.VITE_API_URL;
+}
+
 const child = spawn("npm", ["-w", "apps/web", "run", "dev"], {
   cwd: root,
   stdio: "inherit",

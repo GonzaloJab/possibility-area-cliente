@@ -39,25 +39,17 @@ export function TarifaTab({ supply }: Props) {
   const t = supply.tariff;
   return (
     <div style={{ marginBottom: 24 }}>
-      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 28px)' }}>
+      <div className="pc" style={{ padding: 28 }}>
         <div className="tar-grid">
-          <div
-            style={{
-              paddingLeft: 'clamp(12px, 3vw, 20px)',
-              borderLeft: '4px solid var(--green)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
+          <div style={{ paddingLeft: 20, borderLeft: '4px solid var(--green)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--green)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 10 }}>
               Tu tarifa actual con {t?.contractName ?? 'Possibility Energía'}
             </p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
-              <span className="t-display-lg">
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 54, fontWeight: 400, letterSpacing: '-.02em', lineHeight: 1 }}>
                 €{Number(t?.pricePerKwh ?? 0).toFixed(4).replace('.', ',')}
               </span>
-              <span style={{ fontSize: 'clamp(13px, 3vw, 16px)', color: 'var(--muted)', fontWeight: 500 }}>/kWh</span>
+              <span style={{ fontSize: 16, color: 'var(--muted)' }}>/kWh</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 20 }}>
               Coste medio mensual:{' '}
@@ -69,7 +61,7 @@ export function TarifaTab({ supply }: Props) {
               <p style={{ fontSize: 11, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 4 }}>
                 Más barata que la media
               </p>
-              <p style={{ fontSize: 'clamp(22px, 6vw, 30px)', fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--accent-green)', lineHeight: 1 }}>
+              <p style={{ fontSize: 30, fontWeight: 500, color: 'var(--green)', lineHeight: 1 }}>
                 {t?.marketAvgPercent ?? 0}%
               </p>
             </div>

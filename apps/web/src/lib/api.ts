@@ -1,6 +1,13 @@
 import type { Supply, Invoice, Consumption, Tariff, User } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000';
+/** Dev default `/api` uses Vite proxy → 127.0.0.1:4000 (avoids Windows `localhost`→IPv6 vs uvicorn on 127.0.0.1). */
+const trimmed = String(import.meta.env.VITE_API_URL ?? '').trim();
+const API_URL =
+  trimmed !== ''
+    ? trimmed
+    : import.meta.env.DEV
+      ? '/api'
+      : 'http://127.0.0.1:4000';
 const TOKEN_KEY = 'possibility_token';
 
 export const tokenStore = {

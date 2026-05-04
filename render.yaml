@@ -1,8 +1,7 @@
-# Render Infrastructure as Code
-# https://render.com/docs/blueprint-spec
-# When you connect this repo, Render creates both services from the same Dockerfiles
-# you use locally. To migrate to Hetzner later, the same images can be pulled there
-# without rebuilds.
+# Render Infrastructure as Code — https://render.com/docs/blueprint-spec
+# Three services: api (FastAPI), web (clients), admin (e.g. admin.possibility.es).
+# Same Dockerfiles run locally and on Render. Migrate to Hetzner later by
+# pulling the same images from GHCR.
 services:
   - type: web
     name: possibility-api
@@ -20,15 +19,15 @@ services:
       - key: PORT
         value: 4000
       - key: DATABASE_URL
-        sync: false  # Neon: paste the standard postgresql:// connection string
+        sync: false
       - key: DATABASE_URL_ASYNC
-        sync: false  # Neon: same as DATABASE_URL but with postgresql+asyncpg://
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_MINUTES
         value: 10080
       - key: CORS_ORIGINS
-        sync: false  # https://possibility-web.onrender.com (or your custom domain)
+        sync: false  # comma-sep production origins, e.g. https://clientes.possibility.es,https://admin.possibility.es
 
   - type: web
     name: possibility-web
@@ -41,4 +40,21 @@ services:
     autoDeploy: true
     envVars:
       - key: VITE_API_URL
-        sync: false  # https://possibility-api.onrender.com
+        sync: false  # https://api.possibility.es (or possibility-api.onrender.com)
+
+  - type: web
+    name: possibility-admin
+    runtime: docker
+    dockerfilePath: ./apps/admin/Dockerfile
+    dockerContext: .
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL
+        sync: false  # same as web
+      - key: VITE_CLIENT_URL
+        sync: false  # public URL of the client app — "View as client" / impersonation links
+    # After deploy: Render → possibility-admin → Custom Domains → add admin.possibility.es
+    # Point DNS (GoDaddy or Cloudflare): CNAME admin → <render-hostname>.onrender.com (or Render’s instructed target).

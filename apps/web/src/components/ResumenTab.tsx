@@ -10,7 +10,6 @@ export function ResumenTab({ supply }: Props) {
   const lastInvoice = supply.invoices?.[0];
   const baseMonthly = Number(supply.tariff?.monthlyBaseCost ?? 78);
 
-  // Annual savings: tu coste vs media-mercado (factor 2.0 like template's 3.162€ vs 1.581€)
   const yourYearlyCost = supply.consumption?.reduce((sum, c) => sum + Number(c.totalKwh), 0) ?? 0;
   const yourCostEur = Math.round(yourYearlyCost * Number(supply.tariff?.pricePerKwh ?? 0.089));
   const marketCost = yourCostEur * 2;
@@ -32,16 +31,7 @@ export function ResumenTab({ supply }: Props) {
 
   return (
     <div className="grid3">
-      {/* ─── Última factura ─── */}
-      <div
-        className="pc"
-        style={{
-          padding: 'clamp(16px, 4vw, 24px)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className="pc" style={{ padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(26,107,26,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -50,66 +40,46 @@ export function ResumenTab({ supply }: Props) {
                 <path d="M7 6h6M7 9h4" />
               </svg>
             </div>
-            <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
-              Última factura
-            </p>
+            <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>Última factura</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginBottom: 5 }}>
-            <span className="t-display">{lastInvoice ? Number(lastInvoice.amount).toFixed(2).replace('.', ',') : '—'}</span>
-            <span style={{ fontSize: 'clamp(14px, 4vw, 20px)', color: 'var(--muted)', fontWeight: 500 }}>€</span>
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 48, letterSpacing: '-.02em', lineHeight: 1 }}>
+              {lastInvoice ? Number(lastInvoice.amount).toFixed(2).replace('.', ',') : '—'}
+            </span>
+            <span style={{ fontSize: 20, color: 'var(--muted)', fontWeight: 300 }}>€</span>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
             {lastInvoice?.period} · {lastInvoice?.number}
           </p>
-          <span className="bd bd--success">
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 8l4 4 6-7" />
-            </svg>
+          <span className="bd">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8l4 4 6-7" /></svg>
             Pagada
           </span>
         </div>
         <button className="pb" style={{ marginTop: 18 }}>
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M8 2v9M4 8l4 4 4-4M2 13h12" />
-          </svg>
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 2v9M4 8l4 4 4-4M2 13h12" /></svg>
           Descargar PDF
         </button>
       </div>
 
-      {/* ─── Ahorro 2026 ─── */}
-      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
+      <div className="pc" style={{ padding: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
           <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(45,138,45,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2D8A2D" strokeWidth="2">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2D8A2D" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
           </div>
-          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
-            Ahorro 2026 vs mercado
-          </p>
+          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>Ahorro 2026 vs mercado</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginBottom: 14 }}>
-          <span className="t-display" style={{ color: 'var(--accent-green)' }}>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 48, letterSpacing: '-.02em', color: 'var(--green)', lineHeight: 1 }}>
             {savings.toLocaleString('es-ES')}
           </span>
-          <span style={{ fontSize: 'clamp(14px, 4vw, 20px)', color: 'var(--muted)', fontWeight: 500 }}>€</span>
+          <span style={{ fontSize: 20, color: 'var(--muted)', fontWeight: 300 }}>€</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 44, marginBottom: 14 }}>
           {monthlyCosts.map((v, i) => {
             const h = (v / maxMonthly) * 100;
             const last = i === monthlyCosts.length - 1;
-            return (
-              <div
-                key={i}
-                style={{
-                  flex: 1,
-                  height: `${h}%`,
-                  background: last ? 'var(--accent-green)' : 'var(--green-bg)',
-                  borderRadius: 3,
-                  minHeight: 4,
-                }}
-              />
-            );
+            return <div key={i} style={{ flex: 1, height: `${h}%`, background: last ? 'var(--green)' : 'var(--green-bg)', borderRadius: 3, minHeight: 4 }} />;
           })}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid var(--line)', fontSize: 12 }}>
@@ -126,18 +96,12 @@ export function ResumenTab({ supply }: Props) {
         </div>
       </div>
 
-      {/* ─── Tu tarifa vs competencia ─── */}
-      <div className="pc" style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
+      <div className="pc" style={{ padding: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
           <div style={{ width: 30, height: 30, borderRadius: 9, background: 'rgba(26,107,26,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2">
-              <path d="M3 3v18h18" />
-              <path d="M7 17l4-4 4 4 5-5" />
-            </svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2"><path d="M3 3v18h18" /><path d="M7 17l4-4 4 4 5-5" /></svg>
           </div>
-          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
-            Tu tarifa vs competencia
-          </p>
+          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>Tu tarifa vs competencia</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 16, fontSize: 11, color: 'var(--green)', fontWeight: 500 }}>
           <span className="live" />
@@ -152,36 +116,14 @@ export function ResumenTab({ supply }: Props) {
                 <span style={{ fontSize: 11, fontWeight: c.you ? 500 : 400, color: c.you ? 'var(--green)' : 'var(--ink)' }}>
                   {c.monthly}€
                 </span>
-                <div
-                  className="bs"
-                  style={{
-                    width: '100%',
-                    height: `${h}%`,
-                    background: c.you ? 'var(--green)' : '#E5EBE2',
-                    borderRadius: '7px 7px 0 0',
-                    minHeight: 8,
-                    transition: 'background .2s',
-                  }}
-                />
+                <div className="bs" style={{ width: '100%', height: `${h}%`, background: c.you ? 'var(--green)' : '#E5EBE2', borderRadius: '7px 7px 0 0', minHeight: 8, transition: 'background .2s' }} />
               </div>
             );
           })}
         </div>
         <div style={{ display: 'flex', gap: 7 }}>
           {competitors.map((c) => (
-            <span
-              key={c.name}
-              style={{
-                flex: 1,
-                fontSize: 10,
-                textAlign: 'center',
-                fontWeight: c.you ? 500 : 400,
-                color: c.you ? 'var(--green)' : 'var(--muted)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
+            <span key={c.name} style={{ flex: 1, fontSize: 10, textAlign: 'center', fontWeight: c.you ? 500 : 400, color: c.you ? 'var(--green)' : 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {c.name}
             </span>
           ))}

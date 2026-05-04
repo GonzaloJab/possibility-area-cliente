@@ -8,6 +8,6 @@ where npm >nul 2>&1 || (
   pause
   exit /b 1
 )
-echo [Native] API + Web ^| http://localhost:4000  http://localhost:5173 ^| DB from .env at repo root
+echo [Native] API + Client web + Admin ^| http://localhost:4000  http://localhost:5173  http://localhost:5174/login ^| DB from .env at repo root
 call npm run dev:stack
 if errorlevel 1 pause

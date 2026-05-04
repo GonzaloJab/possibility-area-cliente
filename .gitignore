@@ -8,6 +8,9 @@ build/
 apps/web/vite.config.js
 apps/web/vite.config.d.ts
 apps/web/vite.config.ts.timestamp-*.mjs
+apps/admin/vite.config.js
+apps/admin/vite.config.d.ts
+apps/admin/vite.config.ts.timestamp-*.mjs
 
 # ─── Python / api ───────────────────────────────────────────────────
 __pycache__/

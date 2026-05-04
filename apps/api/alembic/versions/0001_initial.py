@@ -5,7 +5,7 @@ Revises:
 Create Date: 2026-05-03
 
 """
-from typing import Sequence, Union
+from typing import Union
 from alembic import op
 import sqlalchemy as sa
 
@@ -30,6 +30,8 @@ def upgrade() -> None:
 
     supply_type = sa.Enum("RESIDENCIAL", "RESTAURACION", "EMPRESA", name="supply_type")
     invoice_status = sa.Enum("PAGADA", "PENDIENTE", "VENCIDA", name="invoice_status")
+    supply_type.create(op.get_bind(), checkfirst=True)
+    invoice_status.create(op.get_bind(), checkfirst=True)
 
     op.create_table(
         "supplies",
@@ -103,6 +105,5 @@ def downgrade() -> None:
     op.drop_table("supplies")
     op.drop_index("ix_users_email", table_name="users")
     op.drop_table("users")
-
     sa.Enum(name="invoice_status").drop(op.get_bind(), checkfirst=True)
     sa.Enum(name="supply_type").drop(op.get_bind(), checkfirst=True)

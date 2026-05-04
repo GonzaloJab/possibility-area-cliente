@@ -5,7 +5,8 @@ from datetime import datetime
 from decimal import Decimal as PyDecimal
 
 from sqlalchemy import (
-    DateTime, Enum, ForeignKey, Integer, JSON, Numeric, String, UniqueConstraint, func, Index,
+    Boolean, DateTime, Enum, ForeignKey, Integer, JSON, Numeric, String,
+    UniqueConstraint, func, Index,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -14,6 +15,11 @@ from app.db import Base
 
 def _uuid() -> str:
     return str(uuid.uuid4())
+
+
+class UserRole(str, enum.Enum):
+    ADMIN = "ADMIN"
+    CLIENT = "CLIENT"
 
 
 class SupplyType(str, enum.Enum):
@@ -35,6 +41,12 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String, nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
+    role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole, name="user_role"), default=UserRole.CLIENT, nullable=False
+    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    must_change_password: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -60,6 +72,7 @@ class Supply(Base):
 
     contracted_power: Mapped[PyDecimal] = mapped_column(Numeric(6, 2), default=PyDecimal("4.6"))
     cups: Mapped[str | None] = mapped_column(String, unique=True, nullable=True)
+    supplier: Mapped[str | None] = mapped_column(String, nullable=True)  # Iberdrola, Endesa, ...
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -108,6 +121,10 @@ class Invoice(Base):
         Enum(InvoiceStatus, name="invoice_status"), default=InvoiceStatus.PENDIENTE
     )
     pdf_url: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    # OCR traceability
+    supplier: Mapped[str | None] = mapped_column(String, nullable=True)  # Iberdrola, Endesa, etc.
+    raw_ocr: Mapped[dict | None] = mapped_column(JSON, nullable=True)    # full OCR JSON for re-processing
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
