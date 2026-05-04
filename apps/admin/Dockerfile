@@ -14,7 +14,6 @@ ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_CLIENT_URL=$VITE_CLIENT_URL
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/admin/node_modules ./apps/admin/node_modules
 COPY tsconfig.base.json ./
 COPY apps/admin ./apps/admin
 WORKDIR /app/apps/admin
